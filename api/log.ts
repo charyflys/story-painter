@@ -1,6 +1,6 @@
 import { put } from "@vercel/blob";
 import querystring from 'querystring'
-
+export const runtime = 'edge';
 // const { url } = await put('articles/blob.txt', 'Hello World!', { access: 'public' });
 const fronturl = 'https://story-painter-theta.vercel.app/'
 const filesizelimit = 2
