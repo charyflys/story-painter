@@ -55,11 +55,9 @@ export async function PUT(req: Request) {
 		// );
         const { url:fileUrl } = await put(`${key}`, JSON.stringify(generateStorageData(logdata, name as string)), { access: 'public' });
 		// 返回log地址
-		return {
-			data: JSON.stringify({
-				url: fronturl + '?key=' +fileUrl.replace('https://uxle9woampkgealk.public.blob.vercel-storage.com/',''),
-			}), status: 200
-		};
+		return Response.json({
+            url: fronturl + '?key=' +fileUrl.replace('https://uxle9woampkgealk.public.blob.vercel-storage.com/',''),
+        })
     // }
 }
 
