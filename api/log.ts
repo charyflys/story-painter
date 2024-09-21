@@ -2,7 +2,7 @@ import { put } from "@vercel/blob";
 import querystring from 'querystring'
 // export const runtime = 'edge';
 // const { url } = await put('articles/blob.txt', 'Hello World!', { access: 'public' });
-const fronturl = 'https://story-painter-theta.vercel.app/'
+const fronturl = process.env.WEBSITE_URL as string||'https://painter.firehomework.top/'
 const filesizelimit = 2
 export async function GET(req: Request) {
 	const { key, password } = querystring.parse(req.url.replace(/^.+?\?/, ''))
@@ -20,16 +20,6 @@ export async function PUT(req: Request) {
 	const { name, uniform_id, client } = querystring.parse(req.url.replace(/^.+?\?/, ''))
 
 
-	//检验uniform_id的正确性
-	// var patt1 = /^[^:]+:\d+$/;
-	// if (!patt1.test(uniform_id as string)) {
-	// 	//返回未能通过的信息：uniform_id field did not pass validation
-	// 	return Response.json({
-	// 		data: "uniform_id field did not pass validation",
-	// 	}, { status: 400 })
-	// }
-
-	//检验file文件的大小
 	if (file.size > filesizelimit * 1024 * 1024) {
 		return Response.json({
 			data: "Size is too big!",
@@ -37,13 +27,7 @@ export async function PUT(req: Request) {
 	}
 
 
-	//转base64
-	// let logdata = "";
 	const bufferBase64 = Buffer.from(await file.arrayBuffer()).toString('base64')
-	console.log(bufferBase64)
-	// const logdata = btoa(new TextDecoder().decode(new Uint8Array(await file.arrayBuffer())))
-	// logdata = btoa(logdata);
-	// const logdata = await encodeToBase64(file)
 	let key = generateRandomString(4);
 
 
@@ -78,18 +62,3 @@ function generateStorageData(data: any, name: string) {
 		updated_at: new Date().toISOString(),
 	};
 }
-// function encodeToBase64(file:Blob) {
-//     return new Promise<string>((resolve, reject) => {
-//       const reader = new FileReader();
-//       reader.onloadend = () => {
-//         if (typeof reader.result === 'string') {
-//             const base64Data = reader.result.split(',')[1];
-//             resolve(base64Data);
-//         } else {
-//             reject()
-//         }
-//       };
-//       reader.onerror = reject;
-//       reader.readAsDataURL(file);
-//     });
-//   }
