@@ -39,14 +39,15 @@ export async function PUT(req: Request) {
 
 	//转base64
 	// let logdata = "";
-	console.log(new TextDecoder().decode(new Uint8Array(await file.arrayBuffer())))
-	const logdata = btoa(new TextDecoder().decode(new Uint8Array(await file.arrayBuffer())))
+	const bufferBase64 = Buffer.from(await file.arrayBuffer()).toString('base64')
+	console.log(bufferBase64)
+	// const logdata = btoa(new TextDecoder().decode(new Uint8Array(await file.arrayBuffer())))
 	// logdata = btoa(logdata);
 	// const logdata = await encodeToBase64(file)
 	let key = generateRandomString(4);
 
 
-	const { url: fileUrl } = await put(`${key}`, JSON.stringify(generateStorageData(logdata, name as string)), { access: 'public' });
+	const { url: fileUrl } = await put(`${key}`, JSON.stringify(generateStorageData(bufferBase64, name as string)), { access: 'public' });
 	// 返回log地址
 	return Response.json({
 		url: fronturl + '?key=' + key + '#' + fileUrl.replace(`https://uxle9woampkgealk.public.blob.vercel-storage.com/${key}-`, ''),
