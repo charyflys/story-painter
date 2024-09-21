@@ -9,7 +9,7 @@ export async function GET(req:Request) {
     return fetch('https://uxle9woampkgealk.public.blob.vercel-storage.com/'+key)
 }
 export async function PUT(req: Request) {
-    
+
     const obj = await req.formData()
     const file= obj.get('file') as File
     if (!file) {
@@ -53,7 +53,7 @@ export async function PUT(req: Request) {
 		// 	key + "#" + password,
 		// 	JSON.stringify(generateStorageData(logdata, name as string))
 		// );
-        const { url:fileUrl } = await put(``, JSON.stringify(generateStorageData(logdata, name as string)), { access: 'public' });
+        const { url:fileUrl } = await put(`${key}`, JSON.stringify(generateStorageData(logdata, name as string)), { access: 'public' });
 		// 返回log地址
 		return {
 			data: JSON.stringify({
