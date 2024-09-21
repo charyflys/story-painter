@@ -1,7 +1,6 @@
 import { put } from "@vercel/blob";
 import querystring from 'querystring'
-// export const runtime = 'edge';
-// const { url } = await put('articles/blob.txt', 'Hello World!', { access: 'public' });
+
 const fronturl = process.env.WEBSITE_URL as string||'https://painter.firehomework.top/'
 const filesizelimit = 2
 export async function GET(req: Request) {
