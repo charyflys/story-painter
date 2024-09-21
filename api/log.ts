@@ -40,9 +40,9 @@ export async function PUT(req: Request) {
 	//转base64
 	// let logdata = "";
 
-	// logdata = new TextDecoder().decode(new Uint8Array(await file.arrayBuffer()))
+	const logdata = new TextDecoder().decode(new Uint8Array(await file.arrayBuffer()))
 	// logdata = btoa(logdata);
-	const logdata = await encodeToBase64(file)
+	// const logdata = await encodeToBase64(file)
 	let key = generateRandomString(4);
 
 

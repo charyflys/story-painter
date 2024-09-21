@@ -281,7 +281,7 @@ onMounted(async () => {
       // await new Promise<void>((resolve) => {
       //   new setTimeout(() => { resolve() }, 1000)
       // })
-      const log = unzlibSync(Uint8Array.from(atob(record.data), c => c.charCodeAt(0)))
+      const log = unzlibSync(new TextEncoder().encode(record.data))
 
       nextTick(() => {
         const text = strFromU8(log)
