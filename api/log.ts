@@ -39,7 +39,7 @@ export async function PUT(req: Request) {
 
 	//转base64
 	// let logdata = "";
-
+	console.log(new TextDecoder().decode(new Uint8Array(await file.arrayBuffer())))
 	const logdata = btoa(new TextDecoder().decode(new Uint8Array(await file.arrayBuffer())))
 	// logdata = btoa(logdata);
 	// const logdata = await encodeToBase64(file)
@@ -77,18 +77,18 @@ function generateStorageData(data: any, name: string) {
 		updated_at: new Date().toISOString(),
 	};
 }
-function encodeToBase64(file:Blob) {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
-            const base64Data = reader.result.split(',')[1];
-            resolve(base64Data);
-        } else {
-            reject()
-        }
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
+// function encodeToBase64(file:Blob) {
+//     return new Promise<string>((resolve, reject) => {
+//       const reader = new FileReader();
+//       reader.onloadend = () => {
+//         if (typeof reader.result === 'string') {
+//             const base64Data = reader.result.split(',')[1];
+//             resolve(base64Data);
+//         } else {
+//             reject()
+//         }
+//       };
+//       reader.onerror = reject;
+//       reader.readAsDataURL(file);
+//     });
+//   }
