@@ -264,7 +264,7 @@ onMounted(async () => {
   })
   const key = (params as any).key
   const password = location.hash.slice(1)
-
+  Object.assign(window,{unzlibSync})
   const showHl = () => {
     setTimeout(() => {
       if (!isMobile.value) {
@@ -281,7 +281,7 @@ onMounted(async () => {
       // await new Promise<void>((resolve) => {
       //   new setTimeout(() => { resolve() }, 1000)
       // })
-      const log = unzlibSync(new TextEncoder().encode(record.data))
+      const log = unzlibSync(new Uint8Array(await new Blob([record]).arrayBuffer()))
 
       nextTick(() => {
         const text = strFromU8(log)
