@@ -1,11 +1,13 @@
 import { put } from "@vercel/blob";
+import { kv } from '@vercel/kv'
 import querystring from 'querystring'
 
 const fronturl = process.env.WEBSITE_URL as string||'https://painter.firehomework.top/'
 const filesizelimit = 2
 export async function GET(req: Request) {
 	const { key, password } = querystring.parse(req.url.replace(/^.+?\?/, ''))
-	return Response.redirect('https://uxle9woampkgealk.public.blob.vercel-storage.com/' + key + '-' + password)
+	
+	return Response.redirect(await kv.get(`${key}#${password}`)||'')
 }
 export async function PUT(req: Request) {
 
@@ -16,7 +18,9 @@ export async function PUT(req: Request) {
 			data: 'no file error'
 		}, { status: 400 })
 	}
-	const { name, uniform_id, client } = querystring.parse(req.url.replace(/^.+?\?/, ''))
+	const name = obj.get('name')
+	const uniform_id = obj.get('uniform_id')
+	const client = obj.get('client')
 
 
 	if (file.size > filesizelimit * 1024 * 1024) {
@@ -27,13 +31,15 @@ export async function PUT(req: Request) {
 
 
 	const bufferBase64 = Buffer.from(await file.arrayBuffer()).toString('base64')
-	let key = generateRandomString(4);
+	const key = generateRandomString(4);
+	const password = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
 
-
-	const { url: fileUrl } = await put(`${key}`, JSON.stringify(generateStorageData(bufferBase64, name as string)), { access: 'public' });
+	const { url: fileUrl } = await put(`${uniform_id}/${name}/`, JSON.stringify(generateStorageData(bufferBase64, name as string)), { access: 'public' });
+	// const filePath = fileUrl.replace(`https://uxle9woampkgealk.public.blob.vercel-storage.com/`, '')
+	await kv.set(`${key}#${password}`,fileUrl)
 	// 返回log地址
 	return Response.json({
-		url: fronturl + '?key=' + key + '#' + fileUrl.replace(`https://uxle9woampkgealk.public.blob.vercel-storage.com/${key}-`, ''),
+		url: fronturl + '?key=' + key + '#' + password,
 	})
 	// }
 }
