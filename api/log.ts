@@ -9,9 +9,7 @@ export async function GET(req:Request) {
     return fetch('https://uxle9woampkgealk.public.blob.vercel-storage.com/'+key)
 }
 export async function PUT(req: Request) {
-	const url = new URL(fronturl.slice(0, -1) + req.url);
-	const pathname = url.pathname;
-
+    
     const obj = await req.formData()
     const file= obj.get('file') as File
     if (!file) {
