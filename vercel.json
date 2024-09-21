@@ -1,0 +1,14 @@
+{
+    "redirects": [
+        {
+            "source": "/dice/api/log",
+            "destination": "/api/log",
+            "statusCode": 301
+        },
+        {
+            "source": "/dice/api/load_data",
+            "destination": "/api/log",
+            "statusCode": 301
+        }
+    ]
+}
