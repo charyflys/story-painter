@@ -6,8 +6,7 @@ const fronturl = 'https://story-painter-theta.vercel.app/'
 const filesizelimit = 2
 export async function GET(req:Request) {
     const { key, password } = querystring.parse(req.url.replace(/^.+?\?/, ''))
-    // return fetch('https://uxle9woampkgealk.public.blob.vercel-storage.com/'+key)
-    return Response.redirect('https://uxle9woampkgealk.public.blob.vercel-storage.com/'+key)
+    return Response.redirect('https://uxle9woampkgealk.public.blob.vercel-storage.com/'+key+'-'+password)
 }
 export async function PUT(req: Request) {
 
@@ -40,25 +39,16 @@ export async function PUT(req: Request) {
 
 		//转base64
 		let logdata = "";
-		// (new Uint8Array(await file.arrayBuffer())).forEach((byte) => {
-		// 	logdata += String.fromCharCode(byte);
-		// });
+
         logdata = new TextDecoder().decode(new Uint8Array(await file.arrayBuffer()))
 		logdata = btoa(logdata);
-
-		//随机一个key + 一个密码，之后将其拼接起来，存到KV当中。
-		let password = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
 		let key = generateRandomString(4);
 
-		// 存储数据
-		// await db.put(
-		// 	key + "#" + password,
-		// 	JSON.stringify(generateStorageData(logdata, name as string))
-		// );
+
         const { url:fileUrl } = await put(`${key}`, JSON.stringify(generateStorageData(logdata, name as string)), { access: 'public' });
 		// 返回log地址
 		return Response.json({
-            url: fronturl + '?key=' +fileUrl.replace('https://uxle9woampkgealk.public.blob.vercel-storage.com/',''),
+            url: fronturl + '?key=' +key+'#'+fileUrl.replace(`https://uxle9woampkgealk.public.blob.vercel-storage.com/${key}-`,''),
         })
     // }
 }
@@ -86,18 +76,18 @@ function generateStorageData(data: any, name: string) {
 		updated_at: new Date().toISOString(),
 	};
 }
-function encodeToBase64(file:Blob) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
-            const base64Data = reader.result.split(',')[1];
-            resolve(base64Data);
-        } else {
-            reject()
-        }
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
+// function encodeToBase64(file:Blob) {
+//     return new Promise((resolve, reject) => {
+//       const reader = new FileReader();
+//       reader.onloadend = () => {
+//         if (typeof reader.result === 'string') {
+//             const base64Data = reader.result.split(',')[1];
+//             resolve(base64Data);
+//         } else {
+//             reject()
+//         }
+//       };
+//       reader.onerror = reject;
+//       reader.readAsDataURL(file);
+//     });
+//   }
