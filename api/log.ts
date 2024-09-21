@@ -6,7 +6,8 @@ const fronturl = 'https://story-painter-theta.vercel.app/'
 const filesizelimit = 2
 export async function GET(req:Request) {
     const { key, password } = querystring.parse(req.url.replace(/^.+?\?/, ''))
-    return fetch('https://uxle9woampkgealk.public.blob.vercel-storage.com/'+key)
+    // return fetch('https://uxle9woampkgealk.public.blob.vercel-storage.com/'+key)
+    return Response.redirect('https://uxle9woampkgealk.public.blob.vercel-storage.com/'+key)
 }
 export async function PUT(req: Request) {
 
