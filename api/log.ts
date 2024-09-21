@@ -25,24 +25,25 @@ export async function PUT(req: Request) {
 		var patt1 = /^[^:]+:\d+$/;
 		if (!patt1.test(uniform_id as string)) {
 			//返回未能通过的信息：uniform_id field did not pass validation
-			return {
-				data: JSON.stringify({
-					data: "uniform_id field did not pass validation",
-				}), status: 400
-			};
+			return Response.json({
+                data: "uniform_id field did not pass validation",
+            },{status: 400})
 		}
 
 		//检验file文件的大小
 		if (file.size > filesizelimit * 1024 * 1024) {
-			return { data: JSON.stringify({ data: "Size is too big!" }), status: 400 };
+			return Response.json({
+                data: "Size is too big!",
+            },{status: 400})
 		}
 
 
 		//转base64
 		let logdata = "";
-		(new Uint8Array(await file.arrayBuffer())).forEach((byte) => {
-			logdata += String.fromCharCode(byte);
-		});
+		// (new Uint8Array(await file.arrayBuffer())).forEach((byte) => {
+		// 	logdata += String.fromCharCode(byte);
+		// });
+        logdata = new TextDecoder().decode(new Uint8Array(await file.arrayBuffer()))
 		logdata = btoa(logdata);
 
 		//随机一个key + 一个密码，之后将其拼接起来，存到KV当中。
@@ -85,3 +86,18 @@ function generateStorageData(data: any, name: string) {
 		updated_at: new Date().toISOString(),
 	};
 }
+function encodeToBase64(file:Blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+            const base64Data = reader.result.split(',')[1];
+            resolve(base64Data);
+        } else {
+            reject()
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
