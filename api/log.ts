@@ -34,7 +34,7 @@ export async function PUT(req: Request) {
 	const key = generateRandomString(4);
 	const password = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
 
-	const { url: fileUrl } = await put(`${uniform_id}/${name}/`, JSON.stringify(generateStorageData(bufferBase64, name as string)), { access: 'public' });
+	const { url: fileUrl } = await put(`${uniform_id}/${name}/${Math.floor(Date.now()/1000)}`, JSON.stringify(generateStorageData(bufferBase64, name as string)), { access: 'public' });
 	// const filePath = fileUrl.replace(`https://uxle9woampkgealk.public.blob.vercel-storage.com/`, '')
 	await kv.set(`${key}#${password}`,fileUrl)
 	// 返回log地址
