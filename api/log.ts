@@ -1,5 +1,4 @@
-import { put } from "@vercel/blob";
-import { kv } from '@vercel/kv'
+
 import querystring from 'querystring'
 import { createClient } from "edgedb";
 const edgedbClient = createClient()
@@ -18,7 +17,6 @@ export async function GET(req: Request) {
 		}
 		FILTER .keyandPassword = <str>$keyandPassword;
 	  `, { keyandPassword: `${key}#${password}`})
-	// const res = await fetch(await kv.get(`${key}#${password}`)||'').then(res=>res.json())
 	return Response.json(res[0])
 }
 export async function PUT(req: Request) {
@@ -32,7 +30,6 @@ export async function PUT(req: Request) {
 	}
 	const name = obj.get('name')
 	const uniform_id = obj.get('uniform_id')
-	const client = obj.get('client')
 
 
 	if (file.size > filesizelimit * 1024 * 1024) {
@@ -46,9 +43,6 @@ export async function PUT(req: Request) {
 	const key = generateRandomString(4);
 	const password = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
 
-	// const { url: fileUrl } = await put(`${uniform_id}/${name}/${Math.floor(Date.now()/1000)}`, JSON.stringify(generateStorageData(bufferBase64, name as string)), { access: 'public' });
-	// const filePath = fileUrl.replace(`https://uxle9woampkgealk.public.blob.vercel-storage.com/`, '')
-	// await kv.set(`${key}#${password}`,fileUrl);
 	const res = await edgedbClient.query<any>(`
 		SELECT Record {
 		  keyandPassword,
@@ -99,32 +93,6 @@ export async function PUT(req: Request) {
 	// }
 }
 
-export async function POST(req:Request) {
-	// await edgedbClient.query(`
-	// 	INSERT Record {
-	// 	  keyandPassword := 'exampleKey123',
-	// 	  client := 'SealDice',
-	// 	  created_at := '${new Date().toISOString()}',
-	// 	  data := 'This is a long text data...',
-	// 	  name := 'Example Name',
-	// 	  note := '',
-	// 	  updated_at := '${new Date().toISOString()}'
-	// 	};
-	// `);
-	return Response.json(await edgedbClient.query(`
-		SELECT Record {
-		  keyandPassword,
-		  client,
-		  created_at,
-		  data,
-		  name,
-		  note,
-		  updated_at
-		}
-		FILTER .name = <str>$name and .note = <str>$note;
-	  `, { name:"Example Name" ,note : ""}))
-}
-
 function generateRandomString(length: number) {
 	let result = "";
 	const characters =
@@ -137,14 +105,4 @@ function generateRandomString(length: number) {
 	}
 
 	return result;
-}
-function generateStorageData(data: any, name: string) {
-	return {
-		client: "SealDice",
-		created_at: new Date().toISOString(),
-		data: data,
-		name: name,
-		note: "",
-		updated_at: new Date().toISOString(),
-	};
 }
