@@ -7,8 +7,19 @@ const fronturl = process.env.WEBSITE_URL as string||'https://painter.firehomewor
 const filesizelimit = 2
 export async function GET(req: Request) {
 	const { key, password } = querystring.parse(req.url.replace(/^.+?\?/, ''))
-	const res = await fetch(await kv.get(`${key}#${password}`)||'').then(res=>res.json())
-	return Response.json(res)
+	const res = await edgedbClient.query<any>(`
+		SELECT Record {
+		  client,
+		  created_at,
+		  data,
+		  name,
+		  note,
+		  updated_at
+		}
+		FILTER .keyandPassword = <str>$keyandPassword;
+	  `, { keyandPassword: `${key}#${password}`})
+	// const res = await fetch(await kv.get(`${key}#${password}`)||'').then(res=>res.json())
+	return Response.json(res[0])
 }
 export async function PUT(req: Request) {
 
@@ -35,36 +46,53 @@ export async function PUT(req: Request) {
 	const key = generateRandomString(4);
 	const password = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
 
-	const { url: fileUrl } = await put(`${uniform_id}/${name}/${Math.floor(Date.now()/1000)}`, JSON.stringify(generateStorageData(bufferBase64, name as string)), { access: 'public' });
-	const filePath = fileUrl.replace(`https://uxle9woampkgealk.public.blob.vercel-storage.com/`, '')
-	await kv.set(`${key}#${password}`,fileUrl);
-	// const res = await edgedbClient.query(`
-	// 	SELECT Record {
-	// 	  keyandPassword,
-	// 	  client,
-	// 	  created_at,
-	// 	  data,
-	// 	  name,
-	// 	  note,
-	// 	  updated_at
-	// 	}
-	// 	FILTER .name = <str>$name and .note = <str>$note;
-	//   `, { name ,note : uniform_id})
-	// await edgedbClient.query(`
-	// 	INSERT Record {
-	// 	  keyandPassword := '${key}#${password}',
-	// 	  client := 'SealDice',
-	// 	  created_at := '${new Date().toISOString()}',
-	// 	  data := '${bufferBase64}',
-	// 	  name := '${name}',
-	// 	  note := '${uniform_id}',
-	// 	  updated_at := '${new Date().toISOString()}'
-	// 	};
-	// `);
-	// 返回log地址
-	return Response.json({
-		url: fronturl + '?key=' + key + '#' + password,
-	})
+	// const { url: fileUrl } = await put(`${uniform_id}/${name}/${Math.floor(Date.now()/1000)}`, JSON.stringify(generateStorageData(bufferBase64, name as string)), { access: 'public' });
+	// const filePath = fileUrl.replace(`https://uxle9woampkgealk.public.blob.vercel-storage.com/`, '')
+	// await kv.set(`${key}#${password}`,fileUrl);
+	const res = await edgedbClient.query<any>(`
+		SELECT Record {
+		  keyandPassword,
+		  client,
+		  created_at,
+		  data,
+		  name,
+		  note,
+		  updated_at
+		}
+		FILTER .name = <str>$name and .note = <str>$note;
+	  `, { name ,note : uniform_id})
+	if (res.length===0) {
+		await edgedbClient.query(`
+			INSERT Record {
+			  keyandPassword := '${key}#${password}',
+			  client := 'SealDice',
+			  created_at := '${new Date().toISOString()}',
+			  data := '${bufferBase64}',
+			  name := '${name}',
+			  note := '${uniform_id}',
+			  updated_at := '${new Date().toISOString()}'
+			};
+		`);
+		// 返回log地址
+		return Response.json({
+			url: fronturl + '?key=' + key + '#' + password,
+		})
+	} else {
+		await edgedbClient.query(`
+			UPDATE Record
+			FILTER .keyandPassword = <str>$keyandPassword
+			SET {
+			  keyandPassword := <str>$newKey
+			  data := <str>$newData,
+			  updated_at := <str>$newDay
+			};
+		  `, {
+			keyandPassword: res[0].keyandPassword,
+			newKey:`${key}#${password}`,
+			newData:bufferBase64,
+			newDay: new Date().toISOString()
+		  });
+	}
 	// }
 }
 
