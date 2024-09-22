@@ -6,8 +6,8 @@ const fronturl = process.env.WEBSITE_URL as string||'https://painter.firehomewor
 const filesizelimit = 2
 export async function GET(req: Request) {
 	const { key, password } = querystring.parse(req.url.replace(/^.+?\?/, ''))
-	
-	return Response.redirect(await kv.get(`${key}#${password}`)||'')
+	const res = await fetch(await kv.get(`${key}#${password}`)||'').then(res=>res.json())
+	return Response.json(res)
 }
 export async function PUT(req: Request) {
 
