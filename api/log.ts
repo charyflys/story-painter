@@ -2,7 +2,7 @@ import { put } from "@vercel/blob";
 import { kv } from '@vercel/kv'
 import querystring from 'querystring'
 import { createClient } from "edgedb";
-const client = createClient()
+const edgedbClient = createClient()
 const fronturl = process.env.WEBSITE_URL as string||'https://painter.firehomework.top/'
 const filesizelimit = 2
 export async function GET(req: Request) {
@@ -36,8 +36,31 @@ export async function PUT(req: Request) {
 	const password = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
 
 	const { url: fileUrl } = await put(`${uniform_id}/${name}/${Math.floor(Date.now()/1000)}`, JSON.stringify(generateStorageData(bufferBase64, name as string)), { access: 'public' });
-	// const filePath = fileUrl.replace(`https://uxle9woampkgealk.public.blob.vercel-storage.com/`, '')
-	await kv.set(`${key}#${password}`,fileUrl)
+	const filePath = fileUrl.replace(`https://uxle9woampkgealk.public.blob.vercel-storage.com/`, '')
+	await kv.set(`${key}#${password}`,fileUrl);
+	// const res = await edgedbClient.query(`
+	// 	SELECT Record {
+	// 	  keyandPassword,
+	// 	  client,
+	// 	  created_at,
+	// 	  data,
+	// 	  name,
+	// 	  note,
+	// 	  updated_at
+	// 	}
+	// 	FILTER .name = <str>$name and .note = <str>$note;
+	//   `, { name ,note : uniform_id})
+	// await edgedbClient.query(`
+	// 	INSERT Record {
+	// 	  keyandPassword := '${key}#${password}',
+	// 	  client := 'SealDice',
+	// 	  created_at := '${new Date().toISOString()}',
+	// 	  data := '${bufferBase64}',
+	// 	  name := '${name}',
+	// 	  note := '${uniform_id}',
+	// 	  updated_at := '${new Date().toISOString()}'
+	// 	};
+	// `);
 	// 返回log地址
 	return Response.json({
 		url: fronturl + '?key=' + key + '#' + password,
@@ -46,18 +69,18 @@ export async function PUT(req: Request) {
 }
 
 export async function POST(req:Request) {
-	await client.query(`
-		INSERT Record {
-		  keyandPassword := 'exampleKey123',
-		  client := 'clientA',
-		  created_at := '${new Date().toISOString()}',
-		  data := 'This is a long text data...',
-		  name := 'Example Name',
-		  note := 'This is an optional note',
-		  updated_at := '${new Date().toISOString()}'
-		};
-	`);
-	return Response.json(await client.query(`
+	// await edgedbClient.query(`
+	// 	INSERT Record {
+	// 	  keyandPassword := 'exampleKey123',
+	// 	  client := 'SealDice',
+	// 	  created_at := '${new Date().toISOString()}',
+	// 	  data := 'This is a long text data...',
+	// 	  name := 'Example Name',
+	// 	  note := '',
+	// 	  updated_at := '${new Date().toISOString()}'
+	// 	};
+	// `);
+	return Response.json(await edgedbClient.query(`
 		SELECT Record {
 		  keyandPassword,
 		  client,
@@ -67,8 +90,8 @@ export async function POST(req:Request) {
 		  note,
 		  updated_at
 		}
-		FILTER .keyandPassword = <str>$key;
-	  `, { key:'exampleKey123' }))
+		FILTER .name = <str>$name and .note = <str>$note;
+	  `, { name:"Example Name" ,note : ""}))
 }
 
 function generateRandomString(length: number) {
