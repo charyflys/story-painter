@@ -82,7 +82,7 @@ export async function PUT(req: Request) {
 			UPDATE Record
 			FILTER .keyandPassword = <str>$keyandPassword
 			SET {
-			  keyandPassword := <str>$newKey
+			  keyandPassword := <str>$newKey,
 			  data := <str>$newData,
 			  updated_at := <str>$newDay
 			};
@@ -92,6 +92,9 @@ export async function PUT(req: Request) {
 			newData:bufferBase64,
 			newDay: new Date().toISOString()
 		  });
+		  return Response.json({
+			url: fronturl + '?key=' + key + '#' + password,
+		})
 	}
 	// }
 }
