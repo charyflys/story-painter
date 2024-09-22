@@ -47,6 +47,9 @@ importers:
       dayjs:
         specifier: ^1.11.11
         version: 1.11.11
+      edgedb:
+        specifier: ^1.5.12
+        version: 1.5.12
       fflate:
         specifier: ^0.7.4
         version: 0.7.4
@@ -81,6 +84,9 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1(vue@3.4.27(typescript@5.4.5))
     devDependencies:
+      '@edgedb/generate':
+        specifier: ^0.5.6
+        version: 0.5.6(edgedb@1.5.12)
       '@types/file-saver':
         specifier: ^2.0.7
         version: 2.0.7
@@ -764,6 +770,13 @@ packages:
     peerDependencies:
       vue: ^3.0.11
 
+  '@edgedb/generate@0.5.6':
+    resolution: {integrity: sha512-Nmd4ibgN3M7qxxHsOyB9NERp03449BfV+W7CWCpIE/tcvBr19GynoT5yI3k55k5NKzzstATwKtV+wVHXiOgizw==}
+    engines: {node: '>= 18.0.0'}
+    hasBin: true
+    peerDependencies:
+      edgedb: ^1.5.10
+
   '@emotion/hash@0.8.0':
     resolution: {integrity: sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==}
 
@@ -908,6 +921,9 @@ packages:
   '@fastify/busboy@2.1.1':
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
+
+  '@iarna/toml@2.2.5':
+    resolution: {integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -1403,6 +1419,11 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
+  edgedb@1.5.12:
+    resolution: {integrity: sha512-IZHCAyKmdSpLqGuM2oSrw0037Qr8Y0S5KoJYArsc5KYJCv10ScU7Uyr/b7pOd2UYWx8DBFSyTmMweIgFRVOdCQ==}
+    engines: {node: '>= 18.0.0'}
+    hasBin: true
+
   electron-to-chromium@1.4.783:
     resolution: {integrity: sha512-bT0jEz/Xz1fahQpbZ1D7LgmPYZ3iHVY39NcWWro1+hA2IvjiPeaXtfSqrQ+nXjApMvQRE2ASt1itSLRrebHMRQ==}
 
@@ -1418,6 +1439,10 @@ packages:
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
+
+  env-paths@3.0.0:
+    resolution: {integrity: sha512-dtJUTepzMW3Lm/NPxRf3wP4642UWhjL2sQxc+ym2YMj1m/H2zDNQOlezafzkHwn6sMstjHTwG6iQQsctDW/b1A==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   esbuild@0.20.2:
     resolution: {integrity: sha512-WdOOppmUNU+IbZ0PaDiTst80zjnrOkyJNHoKupIcVyU8Lvla3Ugx94VzkQ32Ijqd7UhHJy75gNWDMUekcrSJ6g==}
@@ -1572,6 +1597,10 @@ packages:
 
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
+
+  isexe@3.1.1:
+    resolution: {integrity: sha512-LpB/54B+/2J5hqQ7imZHfdU31OlgQqx7ZicVlkm9kzg9/w8GKLEcFfJl/t7DCEDueOyBAD6zCCwTO6Fzs0NoEQ==}
+    engines: {node: '>=16'}
 
   jackspeak@3.1.2:
     resolution: {integrity: sha512-kWmLKn2tRtfYMF/BakihVVRzBKOxz4gJMiL2Rj91WnAB5TPZumSH99R/Yf1qE1u4uRimvCSJfm6hnxohXeEXjQ==}
@@ -1874,6 +1903,9 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
+  shell-quote@1.8.1:
+    resolution: {integrity: sha512-6j1W9l1iAs/4xYBI1SYOVZyFcCis9b4KCLQ8fgAGG07QvzaRLVVRQvAy85yNmmZSjYjg4MWh4gNvlPujU/5LpA==}
+
   signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
@@ -2112,6 +2144,11 @@ packages:
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
     engines: {node: '>= 8'}
+    hasBin: true
+
+  which@4.0.0:
+    resolution: {integrity: sha512-GlaYyEb07DPxYCKhKzplCWBJtvxZcZMrL+4UkrTSJHHPyZU4mYYTv3qaOe77H7EODLSSopAUFAc6W8U4yqvscg==}
+    engines: {node: ^16.13.0 || >=18.0.0}
     hasBin: true
 
   wrap-ansi@7.0.0:
@@ -2898,6 +2935,14 @@ snapshots:
     dependencies:
       vue: 3.4.27(typescript@5.4.5)
 
+  '@edgedb/generate@0.5.6(edgedb@1.5.12)':
+    dependencies:
+      '@iarna/toml': 2.2.5
+      debug: 4.3.4
+      edgedb: 1.5.12
+    transitivePeerDependencies:
+      - supports-color
+
   '@emotion/hash@0.8.0': {}
 
   '@esbuild/aix-ppc64@0.20.2':
@@ -2970,6 +3015,8 @@ snapshots:
     optional: true
 
   '@fastify/busboy@2.1.1': {}
+
+  '@iarna/toml@2.2.5': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -3482,6 +3529,16 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
+  edgedb@1.5.12:
+    dependencies:
+      debug: 4.3.4
+      env-paths: 3.0.0
+      semver: 7.6.2
+      shell-quote: 1.8.1
+      which: 4.0.0
+    transitivePeerDependencies:
+      - supports-color
+
   electron-to-chromium@1.4.783: {}
 
   emoji-regex@8.0.0: {}
@@ -3491,6 +3548,8 @@ snapshots:
   encode-utf8@1.0.3: {}
 
   entities@4.5.0: {}
+
+  env-paths@3.0.0: {}
 
   esbuild@0.20.2:
     optionalDependencies:
@@ -3637,6 +3696,8 @@ snapshots:
   is-plain-object@5.0.0: {}
 
   isexe@2.0.0: {}
+
+  isexe@3.1.1: {}
 
   jackspeak@3.1.2:
     dependencies:
@@ -3921,6 +3982,8 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
+  shell-quote@1.8.1: {}
+
   signal-exit@4.1.0: {}
 
   source-map-js@1.2.0: {}
@@ -4158,6 +4221,10 @@ snapshots:
   which@2.0.2:
     dependencies:
       isexe: 2.0.0
+
+  which@4.0.0:
+    dependencies:
+      isexe: 3.1.1
 
   wrap-ansi@7.0.0:
     dependencies:

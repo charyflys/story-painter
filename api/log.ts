@@ -1,7 +1,8 @@
 import { put } from "@vercel/blob";
 import { kv } from '@vercel/kv'
 import querystring from 'querystring'
-
+import { createClient } from "edgedb";
+const client = createClient()
 const fronturl = process.env.WEBSITE_URL as string||'https://painter.firehomework.top/'
 const filesizelimit = 2
 export async function GET(req: Request) {
@@ -42,6 +43,32 @@ export async function PUT(req: Request) {
 		url: fronturl + '?key=' + key + '#' + password,
 	})
 	// }
+}
+
+export async function POST(req:Request) {
+	await client.query(`
+		INSERT Record {
+		  keyandPassword := 'exampleKey123',
+		  client := 'clientA',
+		  created_at := '${new Date().toISOString()}',
+		  data := 'This is a long text data...',
+		  name := 'Example Name',
+		  note := 'This is an optional note',
+		  updated_at := '${new Date().toISOString()}'
+		};
+	`);
+	return Response.json(await client.query(`
+		SELECT Record {
+		  keyandPassword,
+		  client,
+		  created_at,
+		  data,
+		  name,
+		  note,
+		  updated_at
+		}
+		FILTER .keyandPassword = <str>$key;
+	  `, { key:'exampleKey123' }))
 }
 
 function generateRandomString(length: number) {
