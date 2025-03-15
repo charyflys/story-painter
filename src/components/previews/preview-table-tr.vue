@@ -1,7 +1,7 @@
 <template>
     <!-- 这句是为了防止空元素占行 -->
     <tr>
-      <td :style="{ 'color': colorByName(source) }" style="border: none;width: 200px;" class="_nickname">
+      <td :style="{ 'color': colorByName(source) }" style="border: none;width: 120px;" class="_nickname">
         {{ nicknameSolve(source) }}
       </td>
       <td :style="{ 'color': colorByName(source) }" style="border: none;border-left: 1px solid black;" v-html="previewMessageSolve(source)"></td>
