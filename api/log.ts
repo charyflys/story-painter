@@ -30,7 +30,7 @@ export async function PUT(req: Request) {
 	}
 	const name = obj.get('name')
 	const uniform_id = obj.get('uniform_id')
-
+	const client = obj.get('client')
 
 	if (file.size > filesizelimit * 1024 * 1024) {
 		return Response.json({
@@ -59,7 +59,7 @@ export async function PUT(req: Request) {
 		await edgedbClient.query(`
 			INSERT Record {
 			  keyandPassword := '${key}#${password}',
-			  client := 'SealDice',
+			  client := '${client}',
 			  created_at := '${new Date().toISOString()}',
 			  data := '${bufferBase64}',
 			  name := '${name}',
@@ -76,11 +76,13 @@ export async function PUT(req: Request) {
 			UPDATE Record
 			FILTER .keyandPassword = <str>$keyandPassword
 			SET {
+			  client := <str>$client,
 			  keyandPassword := <str>$newKey,
 			  data := <str>$newData,
 			  updated_at := <str>$newDay
 			};
 		  `, {
+			client,
 			keyandPassword: res[0].keyandPassword,
 			newKey:`${key}#${password}`,
 			newData:bufferBase64,
